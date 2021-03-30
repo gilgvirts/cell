@@ -4,15 +4,16 @@ contacts = []
 VALUES = ["first", "last", "phone", "time"]
 
 
-def analyze(file_name):
-    with open(file_name, "r") as f:
+# Read the lines from data file and send to scraping
+def analyze(data_file_name):
+    with open(data_file_name, "r") as f:
         collect_codes(f.readline())
         for i in range(1, 4):
             collect_data(f.readline(), VALUES[i])
         format_time()
-        print(contacts)
 
 
+# Formatting date for readability
 def format_time():
     for c in contacts:
         d = c[VALUES[3]]
@@ -20,6 +21,7 @@ def format_time():
         c[VALUES[3]] = time.strftime('%Y-%m-%d %H:%M:%S', obj)
 
 
+# Collect eace contact code and first name
 def collect_codes(names_line):
     global contacts
     reduced_line = names_line[4:]
@@ -33,6 +35,7 @@ def collect_codes(names_line):
         contacts.append(c)
 
 
+# Collect last names, phone numbers and date from data
 def collect_data(line_from, type):
     global contacts
     reduced_line = line_from[4:]
@@ -46,7 +49,7 @@ def collect_data(line_from, type):
                 c[type] = reduced_line[0:name_length].replace("\xa0", " ")
         reduced_line = reduced_line[name_length:]
 
-
+# Saving contacts to a file and printing to screen
 def save_res(to_file):
     with open(to_file, "w") as f:
         for c in contacts:
